@@ -5,6 +5,13 @@ const { Collection, default: mongoose } = require('mongoose');
 
 const MONGO_URL = process.env.MONGO_URL
 const PORT = process.env.PORT || 3000
+app.use(express.json());
+const authRoute = require("./routes/auth");
+const Postroute = require("./routes/Posts");
+
+app.use("/api/auth", authRoute)
+app.use("/api/article", Postroute)
+
 
 app.get('/', (req, res, next) => {
     res.status(200).json({
