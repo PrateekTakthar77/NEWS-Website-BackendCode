@@ -24,30 +24,11 @@ function App() {
         setPhoto(e.target.files[0]);
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const blogData = {
-            title: title, // The value captured from the form
-            description: description, // The value captured from the form
-            category: category,
-        };
-
-        const formData = new FormData();
-        formData.append("title", blogData.title);
-        formData.append("description", blogData.description);
-        formData.append("category", blogData.category);
-        // Add other fields to formData as needed
-
+    const uploadBlogData = async (blogData) => {
         try {
             const response = await axios.post(
                 "http://localhost:3040/api/article",
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
+                blogData
             );
             console.log("Blog uploaded:", response.data);
 
@@ -61,10 +42,85 @@ function App() {
         }
     };
 
+    // const uploadImage = async () => {
+    //   if (!photo) {
+    //     alert("Please select an image to upload.");
+    //     return;
+    //   }
+
+    //   const formData = new FormData();
+    //   formData.append("file", photo); // Use the field name your API expects
+    //   formData.append("upload_preset", "ml_default"); // Replace with your actual upload preset name
+
+    //   try {
+    //     const response = await axios.post(
+    //       `https://api.cloudinary.com/v1_1/dmlflkbrx/upload`,
+    //       formData
+    //     );
+    //     console.log("Image uploaded:", response.data);
+    //     // Extract the secure URL from the Cloudinary response
+    //     const secureUrl = response.data.secure_url;
+    //   } catch (error) {
+    //     console.error("Error uploading image:", error);
+    //     console.log("Response data:", error.response.data);
+    //   }
+    // };
+
+    const uploadImage = async () => {
+        if (!photo) {
+            alert("Please select an image to upload.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", photo); // Use the field name your API expects
+        formData.append("upload_preset", "ml_default"); // Replace with your actual upload preset name
+
+        try {
+            const response = await axios.post(
+                `https://api.cloudinary.com/v1_1/dmlflkbrx/upload`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+            console.log("Image uploaded:", response.data);
+
+            // Extract the secure URL from the Cloudinary response
+            const secureUrl = response.data.secure_url;
+
+            // Now, include the secure URL in your blog data
+            const blogData = {
+                title,
+                description,
+                category,
+                photo: secureUrl, // Add this field to your blog data
+            };
+
+            // Call the function to upload the blog data
+            uploadBlogData(blogData);
+        } catch (error) {
+            console.error("Error uploading image:", error);
+            console.log("Response data:", error.response.data);
+        }
+    };
+
+    const handleBlogSubmit = () => {
+        const blogData = {
+            title,
+            description,
+            category,
+            photo: secureUrl,
+        };
+        uploadBlogData(blogData);
+    };
+
     return (
         <div className="form-container">
             <h2>Upload a Blog</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleBlogSubmit}>
                 <input
                     type="text"
                     placeholder="Blog Title"
@@ -85,16 +141,22 @@ function App() {
                     value={category}
                     onChange={handleCategoryChange}
                 />
-                <input
-                    type="file"
-                    accept="image/*"
-                    className="file-input"
-                    onChange={handlePhotoChange}
-                />
                 <button type="submit" className="button">
                     Upload Blog
                 </button>
             </form>
+
+            {/* Separate image upload button and state */}
+            <h2>Upload an Image</h2>
+            <input
+                type="file"
+                accept="image/*"
+                className="file-input"
+                onChange={handlePhotoChange}
+            />
+            <button onClick={uploadImage} className="button">
+                Upload Image
+            </button>
         </div>
     );
 }

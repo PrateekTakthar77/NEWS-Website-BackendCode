@@ -16,6 +16,9 @@ const Postschema = new mongoose.Schema({
     category: {
         type: Array,
         required: true,
+    }, status: {
+        type: String,
+        // default: true, // Set a default value if desired
     }
 }, { timestmaps: true }
 )
