@@ -18,9 +18,12 @@ const Postschema = new mongoose.Schema({
         required: true,
     }, status: {
         type: String,
-        // default: true, // Set a default value if desired
+    }, seotitle: {
+        type: String,
+    }, seodescription: {
+        type: String,
     }
-}, { timestmaps: true }
+}, { timestamps: true }
 )
 
 module.exports = mongoose.model("Post", Postschema);
