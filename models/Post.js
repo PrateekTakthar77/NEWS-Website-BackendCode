@@ -16,6 +16,10 @@ const Postschema = new mongoose.Schema({
     category: {
         type: Array,
         required: true,
+    },
+    subcategory: {
+        type: Array,
+        required: true,
     }, status: {
         type: String,
     }, seotitle: {
