@@ -20,6 +20,9 @@ const Bookings = require("./routes/bookings.routes");
 const customorder = require("./routes/Customorder.routes");
 const Premium = require("./routes/Premium.routes");
 const articleRoute = require("./routes/Posts")
+const categoryRoute = require("./routes/Newscategory.routes")
+const subcategoryRoute = require("./routes/Newssubcategory.routes")
+
 // const userRouter = require("./routes/user.routes")
 const { authorizeUser } = require("./middlewares/AccessAuth");
 
@@ -88,6 +91,9 @@ app.use("/api/checkouts", orderRoutes);
 app.use("/api/admin", adminRouter);
 
 app.use("/api/article", articleRoute)
+app.use("/api/article/category", categoryRoute)
+app.use("/api/article/subcategory", subcategoryRoute)
+
 
 // app.use("/api/user", userRouter)
 
