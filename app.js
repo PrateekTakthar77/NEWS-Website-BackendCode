@@ -40,17 +40,16 @@ app.use(express.urlencoded({ extended: true }));
 //cors
 app.use(cors());
 
+// Increase the limit for request body size to 50MB (adjust as needed)
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
 let count = 0;
 app.get("/", (req, res) => {
   res.send(`Welcome To News Website Server managed by Prateek Takthar ${count++}`);
 });
 
-app.get('/products/', async (req, res, next) => {
 
-
-  let products = await Product.findById('64941d38825d2793151c9478').exec()
-  return res.json(products)
-})
 app.use(
   "/api/auth",
   (res, req, next) => {
