@@ -26,9 +26,9 @@ const getAllBookings = async (req, res) => {
 const deleteBooking = async (req, res) => {
     try {
         const { bookingId } = req.body
-        console.log("Booking Deleted Sucessfully", bookingId);
         const booking = await Bookings.findByIdAndDelete(bookingId)
         res.json({ message: "Booking deleted successfully", booking });
+        console.log("Booking Deleted Sucessfully", bookingId);
     } catch (error) {
         res
             .status(500)

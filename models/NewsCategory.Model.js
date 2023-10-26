@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
 
 const categorySchema = new mongoose.Schema({
-    name: {
+    name: { type: String },
+    subcategory: [{ type: String }],
+    status: {
         type: String,
-        required: true,
-    },
+        enum: ["active", "disable"]
+    }
 });
 
 const Category = mongoose.model("Category", categorySchema);

@@ -2,7 +2,6 @@
 const dotenv = require("dotenv");
 dotenv.config();
 
-//
 console.log(process.env.NODE_ENV);
 const cors = require("cors");
 const express = require("express");
@@ -39,6 +38,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //cors
 app.use(cors());
+// app.use(cors({ origin: 'http://localhost:5173/' }));
 
 // Increase the limit for request body size to 50MB (adjust as needed)
 app.use(express.json({ limit: '50mb' }));
