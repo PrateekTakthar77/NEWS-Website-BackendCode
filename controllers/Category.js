@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Category = require("../models/NewsCategory.Model");
 
 const getAllCategories = async (req, res) => {
@@ -21,20 +22,50 @@ const createCategory = async (req, res) => {
     }
 };
 
+// const getCategoryandUpdate = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         const data = await Category.findByIdAndUpdate(id, req.body)
+//         if (!data) {
+//             res.status(403).json({ message: `cannot find any product with id ${id}` })
+//         }
+//         const updatedPremium = await Category.findById(id);
+//         res.status(200).json(updatedPremium);
+//     } catch (error) {
+//         console.log(error)
+//         res.status(500).json({ message: error.message })
+//     }
+// }
+
 const getCategoryandUpdate = async (req, res) => {
     try {
         const { id } = req.params;
-        const data = await Category.findByIdAndUpdate(id, req.body)
-        if (!data) {
-            res.status(403).json({ message: `cannot find any product with id ${id}` })
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: `Invalid category ID` });
         }
-        const updatedPremium = await Category.findById(id);
-        res.status(200).json(updatedPremium);
+
+        // Fetch the existing category
+        const existingCategory = await Category.findById(id);
+
+        if (!existingCategory) {
+            return res.status(404).json({ message: `Category not found with ID ${id}` });
+        }
+
+        // Update subcategories
+        const subcategoryArray = req.body.subcategory.split(/[, ]/);
+        existingCategory.subcategory = subcategoryArray;
+
+        // Save the updated category
+        const updatedCategory = await existingCategory.save();
+
+        res.status(200).json(updatedCategory);
     } catch (error) {
-        console.log(error)
-        res.status(500).json({ message: error.message })
+        console.error(error);
+        res.status(500).json({ message: error.message });
     }
-}
+};
+
 
 
 const deleteCategory = async (req, res) => {
