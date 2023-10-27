@@ -91,7 +91,7 @@ app.use("/api/admin", adminRouter);
 
 app.use("/api/article", articleRoute)
 app.use("/api/article/category", categoryRoute)
-app.use("/api/article/subcategory", subcategoryRoute)
+// app.use("/api/article/subcategory", subcategoryRoute)
 
 
 // app.use("/api/user", userRouter)

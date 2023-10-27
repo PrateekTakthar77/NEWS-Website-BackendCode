@@ -10,17 +10,50 @@ const getAllCategories = async (req, res) => {
     }
 };
 
-const createCategory = async (req, res) => {
-    const { name, subcategory, status } = req.body;
+// const createCategory = async (req, res) => {
+//     const { name, subcategory, status } = req.body;
 
+//     try {
+//         const category = new Category({ name, status, subcategory });
+//         await category.save();
+//         res.json({ category });
+//     } catch (err) {
+//         res.status(400).json({ error: "Unable to create category" });
+//     }
+// };
+
+
+const createCategory = async (req, res) => {
     try {
-        const category = new Category({ name, status, subcategory });
-        await category.save();
-        res.json({ category });
-    } catch (err) {
-        res.status(400).json({ error: "Unable to create category" });
+        const { category, subcategories, status } = req.body;
+
+        if (!category || !subcategories || subcategories.length === 0) {
+            return res.status(400).json({ error: "Both category and at least one subcategory are required." });
+        }
+
+        // Combine category and subcategories into a single string
+        const categoryAndSubcategory = `${category}`;
+
+        // Set a default status if it's not provided
+        const categoryStatus = status || "active";
+
+        const newCategory = new Category({
+            name: categoryAndSubcategory,
+            subcategory: subcategories, // Use subcategories array directly
+            status: categoryStatus,
+        });
+
+        await newCategory.save();
+
+        res.status(201).json(newCategory);
+    } catch (error) {
+        console.error("Error adding category and subcategories:", error);
+        res.status(500).json({ error: "Failed to add category and subcategories." });
     }
 };
+
+
+
 
 // const getCategoryandUpdate = async (req, res) => {
 //     try {
