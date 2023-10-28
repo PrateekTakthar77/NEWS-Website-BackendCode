@@ -103,7 +103,7 @@ const deleteCategory = async (req, res) => {
         const { categoryId } = req.body; // Correctly extract categoryId
         const catId = await Category.findByIdAndDelete(categoryId); // Use categoryId to delete
         if (catId) {
-            res.json({ message: "Category deleted successfully", catId });
+            res.status(200).json({ message: "Category deleted successfully", catId });
             console.log("Category Deleted Successfully", categoryId);
         } else {
             res.status(404).json({ payload: null, message: "Category not found" });
