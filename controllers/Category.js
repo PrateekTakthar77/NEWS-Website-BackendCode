@@ -52,9 +52,6 @@ const createCategory = async (req, res) => {
     }
 };
 
-
-
-
 // const getCategoryandUpdate = async (req, res) => {
 //     try {
 //         const { id } = req.params;
@@ -86,7 +83,7 @@ const getCategoryandUpdate = async (req, res) => {
         }
 
         // Update subcategories
-        const subcategoryArray = req.body.subcategory.split(/[, ]/);
+        const subcategoryArray = req.body.subcategory.split(",");
         existingCategory.subcategory = subcategoryArray;
 
         // Save the updated category
