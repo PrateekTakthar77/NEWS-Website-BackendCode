@@ -6,7 +6,7 @@ router.post("/", async (req, res) => {
     const newPost = new Post(req.body);
     try {
         const savedPost = await newPost.save();
-        res.status(201).json(savedPost); // Use a 201 Created status for successful creation
+        res.status(201).json(savedPost);
     } catch (err) {
         console.error(err); // Log the error for debugging
         res.status(500).json({ error: "Internal Server Error" });
@@ -68,6 +68,17 @@ router.get('/:id', async (req, res) => {
         }
 
         res.status(200).json(post);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+router.get('/news/latest', async (req, res) => {
+    try {
+        const post = await Post.find({});
+        post.reverse()
+        res.status(200).json(post)
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: 'Internal server error' });
