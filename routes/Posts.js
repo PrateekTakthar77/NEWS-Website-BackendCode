@@ -74,7 +74,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.get('/latest', async (req, res) => {
+router.get('/news/latest', async (req, res) => {
     try {
         const post = await Post.find({});
         post.reverse()
