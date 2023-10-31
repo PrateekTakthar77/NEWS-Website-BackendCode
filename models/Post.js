@@ -26,6 +26,8 @@ const Postschema = new mongoose.Schema({
         type: String,
     }, seodescription: {
         type: String,
+    }, engtitle: {
+        type: String
     }
 }, { timestamps: true }
 )
