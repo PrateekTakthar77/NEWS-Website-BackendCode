@@ -77,7 +77,7 @@ router.get('/:id', async (req, res) => {
 router.get('/news/latest', async (req, res) => {
     try {
         const post = await Post.find({});
-        post.reverse()
+        post.reverse() // we are reversing the array so the latest one appear first 
         res.status(200).json(post)
     } catch (error) {
         console.log(error);
