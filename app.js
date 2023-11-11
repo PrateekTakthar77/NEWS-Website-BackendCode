@@ -58,36 +58,36 @@ app.use(
   },
   authRouter
 );
-app.use(
-  "/api/user-details",
-  (res, req, next) => {
-    count++;
-    next();
-  },
-  userDetailsRouter
-);
-app.use(
-  "/api/products",
-  (req, res, next) => {
-    count++;
-    next();
-  },
-  productRouter
-);
+// app.use(
+//   "/api/user-details",
+//   (res, req, next) => {
+//     count++;
+//     next();
+//   },
+//   userDetailsRouter
+// );
+// app.use(
+//   "/api/products",
+//   (req, res, next) => {
+//     count++;
+//     next();
+//   },
+//   productRouter
+// );
 
-app.use('/api/premium', Premium)
+// app.use('/api/premium', Premium)
 
-app.use('/api/customorders', customorder)
+// app.use('/api/customorders', customorder)
 
-app.use('/api/bookings', Bookings)
+// app.use('/api/bookings', Bookings)
 
-app.use('/api/makingcharges', makingCharges)
+// app.use('/api/makingcharges', makingCharges)
 
-app.use("/api/carts", cartRouter);
+// app.use("/api/carts", cartRouter);
 
-app.use("/api/checkouts", orderRoutes);
+// app.use("/api/checkouts", orderRoutes);
 
-app.use("/api/admin", adminRouter);
+// app.use("/api/admin", adminRouter);
 
 app.use("/api/article", articleRoute)
 app.use("/api/article/category", categoryRoute)
