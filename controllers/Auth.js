@@ -69,66 +69,66 @@ const registerUser = asyncHandler(async (req, res) => {
       });
     }
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: process.env.USER,
-        pass: process.env.PASSWORD,
-      },
-    });
+    // const transporter = nodemailer.createTransport({
+    //   service: 'gmail',
+    //   host: "smtp.gmail.com",
+    //   port: 587,
+    //   secure: false,
+    //   auth: {
+    //     user: process.env.USER,
+    //     pass: process.env.PASSWORD,
+    //   },
+    // });
 
-    const mailOptions = {
-      from: {
-        name: 'Jewellery Bliss',
-        address: process.env.USER
-      }, // sender address
-      to: email, // list of receivers
-      subject: "Thank You for Registering on Jewellery Bliss!",
-      text: `Dear ${name},
-      We are delighted to welcome you to the Jewellery Bliss community! Thank you for taking the first step towards an enhanced experience.
-      
-      We want you to know how much we appreciate your trust in us. Your registration means a lot, and we're excited to have you as part of our app family.
-      With Jewellery Bliss, you unlock a world of possibilities. Whether it's exploring exciting features, accessing exclusive content, or staying connected with like-minded individuals, you're in for a treat.
-      If you have any questions or need assistance as you navigate through the app, please don't hesitate to reach out to our dedicated support team . We're here to ensure your experience with us is smooth and enjoyable.
-      Thank you once again for choosing Jewellery Bliss. We look forward to providing you with an exceptional and tailored experience.
-      Best regards,
-      
-      Jewellery Bliss
-      `, // plain text body
-      // html: "<b>Hello world?</b>", // html body
-    };
+    // const mailOptions = {
+    //   from: {
+    //     name: 'Jewellery Bliss',
+    //     address: process.env.USER
+    //   }, // sender address
+    //   to: email, // list of receivers
+    //   subject: "Thank You for Registering on Jewellery Bliss!",
+    //   text: `Dear ${name},
+    //   We are delighted to welcome you to the Jewellery Bliss community! Thank you for taking the first step towards an enhanced experience.
 
-    const sendMail = async (transporter, mailOptions) => {
-      try {
-        await transporter.sendMail(mailOptions)
-        console.log("Mail Sent succesfully")
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    //   We want you to know how much we appreciate your trust in us. Your registration means a lot, and we're excited to have you as part of our app family.
+    //   With Jewellery Bliss, you unlock a world of possibilities. Whether it's exploring exciting features, accessing exclusive content, or staying connected with like-minded individuals, you're in for a treat.
+    //   If you have any questions or need assistance as you navigate through the app, please don't hesitate to reach out to our dedicated support team . We're here to ensure your experience with us is smooth and enjoyable.
+    //   Thank you once again for choosing Jewellery Bliss. We look forward to providing you with an exceptional and tailored experience.
+    //   Best regards,
 
-    sendMail(transporter, mailOptions)
-    const otp = generateOTP(6); // Generate a 6-digit OTP
+    //   Jewellery Bliss
+    //   `, // plain text body
+    //   // html: "<b>Hello world?</b>", // html body
+    // };
+
+    // const sendMail = async (transporter, mailOptions) => {
+    //   try {
+    //     await transporter.sendMail(mailOptions)
+    //     console.log("Mail Sent succesfully")
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
+
+    // sendMail(transporter, mailOptions)
+    // const otp = generateOTP(6); // Generate a 6-digit OTP
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
       name,
       mobile,
       email,
-      otp,
+      // otp,
       password: hashedPassword,
       role,
-      userCount: ((await User.find({}))?.length ?? 0) + 1,
+      // userCount: ((await User.find({}))?.length ?? 0) + 1,
     });
 
     const payload = {
       name: newUser.name,
       email: newUser.email,
       _id: newUser.id,
-      userCount: newUser.userCount,
+      // userCount: newUser.userCount,
       mobile: newUser.mobile
     };
     const token = generateJwtToken(payload);
@@ -149,7 +149,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 // forgot pass 
 const User = require("../models/User.model");
-const sendEmail = require("../utils/sendEmail");
+// const sendEmail = require("../utils/sendEmail");
 
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
