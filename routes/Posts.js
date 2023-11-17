@@ -52,7 +52,7 @@ router.get('/', async (req, res) => {
         const post = await Post.find({});
         var time = new Date();
         let call = (time.toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }));
-        console.log(`🛰️  API request to get all artcles ${call}`)
+        console.log(`🛰️  API request to get all artcles at ${call}`)
         res.status(200).json(post)
     } catch (error) {
         console.log(error);
@@ -83,12 +83,34 @@ router.get('/news/latest', async (req, res) => {
         post.reverse() // we are reversing the array so the latest one appear first 
         var time = new Date();
         let call = (time.toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }));
-        console.log(`🛰️  API request to get all latest artcles ${call} `)
+        console.log(`🛰️  API request to get all latest artcles at ${call} `)
         res.status(200).json(post)
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+router.get('/related-posts/:postId', async (req, res) => {
+    try {
+        const postId = req.params.postId;
+        const post = await Post.findById(postId);
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        const relatedPosts = await Post.find({ category: { $in: post.category }, _id: { $ne: postId } });
+        relatedPosts.reverse()
+        res.json(relatedPosts);
+        var time = new Date();
+        let call = (time.toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }));
+        console.log(`🛰️  API request to get related artcles at ${call} `)
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'An error occurred' });
+    }
+});
+
 
 module.exports = router
