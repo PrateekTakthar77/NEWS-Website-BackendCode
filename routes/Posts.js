@@ -50,7 +50,9 @@ router.delete("/:id", async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const post = await Post.find({});
-        console.log("🛰️  API request to get all artcles")
+        var time = new Date();
+        let call = (time.toLocaleString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }));
+        console.log(`🛰️  API request to get all artcles ${call}`)
         res.status(200).json(post)
     } catch (error) {
         console.log(error);
@@ -79,7 +81,9 @@ router.get('/news/latest', async (req, res) => {
     try {
         const post = await Post.find({});
         post.reverse() // we are reversing the array so the latest one appear first 
-        console.log("🛰️  API request to get all the latest artcles")
+        var time = new Date();
+        let call = (time.toLocaleString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }));
+        console.log(`🛰️  API request to get all latest artcles ${call}`)
         res.status(200).json(post)
     } catch (error) {
         console.log(error);
