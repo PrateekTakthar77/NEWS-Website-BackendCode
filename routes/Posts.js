@@ -51,7 +51,7 @@ router.get('/', async (req, res) => {
     try {
         const post = await Post.find({});
         var time = new Date();
-        let call = (time.toLocaleString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }));
+        let call = (time.toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }));
         console.log(`🛰️  API request to get all artcles ${call}`)
         res.status(200).json(post)
     } catch (error) {
@@ -82,7 +82,7 @@ router.get('/news/latest', async (req, res) => {
         const post = await Post.find({});
         post.reverse() // we are reversing the array so the latest one appear first 
         var time = new Date();
-        let call = (time.toLocaleString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }));
+        let call = (time.toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }));
         console.log(`🛰️  API request to get all latest artcles ${call}`)
         res.status(200).json(post)
     } catch (error) {
