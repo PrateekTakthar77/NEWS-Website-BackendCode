@@ -83,7 +83,7 @@ router.get('/news/latest', async (req, res) => {
         post.reverse() // we are reversing the array so the latest one appear first 
         var time = new Date();
         let call = (time.toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }));
-        console.log(`🛰️  API request to get all latest artcles ${call}`)
+        console.log(`🛰️  API request to get all latest artcles ${call} `)
         res.status(200).json(post)
     } catch (error) {
         console.log(error);
