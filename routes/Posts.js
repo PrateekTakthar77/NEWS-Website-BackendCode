@@ -108,28 +108,6 @@ router.get('/seotitle/:engtitle', async (req, res) => {
     }
 });
 
-// router.get('/related-posts/:postId', async (req, res) => {
-//     try {
-//         const postId = req.params.postId;
-//         const post = await Post.findById(postId);
-
-//         if (!post) {
-//             return res.status(404).json({ message: 'Post not found' });
-//         }
-
-//         const relatedPosts = await Post.find({ category: { $in: post.category }, _id: { $ne: postId } });
-//         relatedPosts.reverse()
-//         res.json(relatedPosts);
-//         var time = new Date();
-//         let call = (time.toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }));
-//         console.log(`🛰️  API request to get related artcles at ${call} `)
-//     } catch (error) {
-//         console.error('Error:', error);
-//         res.status(500).json({ error: 'An error occurred' });
-//     }
-// });
-
-
 router.get('/related-posts/:postId', async (req, res) => {
     try {
         const postId = req.params.postId;
@@ -139,16 +117,26 @@ router.get('/related-posts/:postId', async (req, res) => {
             return res.status(404).json({ message: 'Post not found' });
         }
 
-        const page = parseInt(req.query.page) || 1; // Default to page 1 if not specified
-        const pageSize = parseInt(req.query.pageSize) || 10; // Default page size to 10 if not specified
+        const page = parseInt(req.query.page) // ||1 Default to page 1 if not specified
+        const pageSize = parseInt(req.query.pageSize) // || 10   Default page size to 10 if not specified
         const skip = (page - 1) * pageSize;
+
+        const totalRelatedPosts = await Post.countDocuments({ category: { $in: post.category }, _id: { $ne: postId } });
+
+        const totalPages = Math.ceil(totalRelatedPosts / pageSize);
 
         const relatedPosts = await Post.find({ category: { $in: post.category }, _id: { $ne: postId } })
             .sort({ createdAt: -1 }) // Sorting by createdAt in descending order
             .skip(skip)
             .limit(pageSize);
 
-        res.json(relatedPosts);
+        res.json({
+            data: relatedPosts,
+            page: page || 0,
+            limit: pageSize || 0,
+            total_pages: totalPages || 0,
+            total_data: totalRelatedPosts,
+        });
 
         // Logging
         const time = new Date().toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true });
@@ -158,6 +146,37 @@ router.get('/related-posts/:postId', async (req, res) => {
         res.status(500).json({ error: 'An error occurred' });
     }
 });
+
+
+
+// router.get('/related-posts/:postId', async (req, res) => {
+//     try {
+//         const postId = req.params.postId;
+//         const post = await Post.findById(postId);
+
+//         if (!post) {
+//             return res.status(404).json({ message: 'Post not found' });
+//         }
+
+//         const page = parseInt(req.query.page) || 1; // Default to page 1 if not specified
+//         const pageSize = parseInt(req.query.pageSize) || 10; // Default page size to 10 if not specified
+//         const skip = (page - 1) * pageSize;
+
+//         const relatedPosts = await Post.find({ category: { $in: post.category }, _id: { $ne: postId } })
+//             .sort({ createdAt: -1 }) // Sorting by createdAt in descending order
+//             .skip(skip)
+//             .limit(pageSize);
+
+//         res.json({ "page": `${page}`, "limit": `${pageSize}`, "data": relatedPosts });
+
+//         // Logging
+//         const time = new Date().toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true });
+//         console.log(`🛰️  API request to get related articles at ${time}. Page: ${page}, PageSize: ${pageSize}`);
+//     } catch (error) {
+//         console.error('Error:', error);
+//         res.status(500).json({ error: 'An error occurred' });
+//     }
+// });
 
 
 module.exports = router
