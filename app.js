@@ -26,7 +26,8 @@ const subcategoryRoute = require("./routes/Newssubcategory.routes")
 const { authorizeUser } = require("./middlewares/AccessAuth");
 
 
-const { Product } = require('./models/Product')
+const { Product } = require('./models/Product');
+const logger = require("./helpers/logger");
 
 //Connecting MongoDB
 mongoConnect();
@@ -111,3 +112,5 @@ const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log("Server Started on port: ", PORT);
 });
+
+logger.info("Application is Running")

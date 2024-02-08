@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Post = require('../models/Post');
+const logger = require("../helpers/logger");
 
 // Add Post
 router.post("/", async (req, res) => {
@@ -52,7 +53,7 @@ router.get('/', async (req, res) => {
         const post = await Post.find({});
         var time = new Date();
         let call = (time.toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }));
-        console.log(`🛰️  API request to get all artcles at ${call}`)
+        logger.info(`🛰️  API request to get all artcles at ${call}`)
         res.status(200).json(post)
     } catch (error) {
         console.log(error);
@@ -140,43 +141,12 @@ router.get('/related-posts/:postId', async (req, res) => {
 
         // Logging
         const time = new Date().toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true });
-        console.log(`🛰️  API request to get related articles at ${time}. Page: ${page}, PageSize: ${pageSize}`);
+        logger.info(`🛰️  API request to get related articles at ${time}. Page: ${page}, PageSize: ${pageSize}`);
     } catch (error) {
         console.error('Error:', error);
         res.status(500).json({ error: 'An error occurred' });
     }
 });
-
-
-
-// router.get('/related-posts/:postId', async (req, res) => {
-//     try {
-//         const postId = req.params.postId;
-//         const post = await Post.findById(postId);
-
-//         if (!post) {
-//             return res.status(404).json({ message: 'Post not found' });
-//         }
-
-//         const page = parseInt(req.query.page) || 1; // Default to page 1 if not specified
-//         const pageSize = parseInt(req.query.pageSize) || 10; // Default page size to 10 if not specified
-//         const skip = (page - 1) * pageSize;
-
-//         const relatedPosts = await Post.find({ category: { $in: post.category }, _id: { $ne: postId } })
-//             .sort({ createdAt: -1 }) // Sorting by createdAt in descending order
-//             .skip(skip)
-//             .limit(pageSize);
-
-//         res.json({ "page": `${page}`, "limit": `${pageSize}`, "data": relatedPosts });
-
-//         // Logging
-//         const time = new Date().toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true });
-//         console.log(`🛰️  API request to get related articles at ${time}. Page: ${page}, PageSize: ${pageSize}`);
-//     } catch (error) {
-//         console.error('Error:', error);
-//         res.status(500).json({ error: 'An error occurred' });
-//     }
-// });
 
 
 module.exports = router
